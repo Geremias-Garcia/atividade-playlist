@@ -13,6 +13,7 @@ import com.github.hugoperlin.results.Resultado;
 import ifpr.pgua.eic.colecaomusicas.model.entities.Artista;
 import ifpr.pgua.eic.colecaomusicas.model.entities.Genero;
 import ifpr.pgua.eic.colecaomusicas.model.entities.Musica;
+import ifpr.pgua.eic.colecaomusicas.utils.DBUtils;
 
 public class JDBCMusicaDAO implements MusicaDAO{
     private static final String INSERTSQL = "INSERT INTO musicas(nome,duracao,anoLancamento,artistaId,generoId) VALUES (?,?,?,?,?)";
@@ -41,9 +42,7 @@ public class JDBCMusicaDAO implements MusicaDAO{
             int ret = pstm.executeUpdate();
 
             if(ret == 1){
-                ResultSet rs = pstm.getGeneratedKeys();
-                rs.next();
-                int id = rs.getInt(1);
+                int id = DBUtils.getLastId(pstm);
 
                 musica.setId(id);
 
@@ -94,8 +93,23 @@ public class JDBCMusicaDAO implements MusicaDAO{
 
     @Override
     public Resultado deletar(int id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deletar'");
+        
+        try (Connection con = fabrica.getConnection()) {
+            PreparedStatement pstm = con.prepareStatement("DELETE FROM musicas WHERE id = (?)");
+            pstm.setInt(1, id);
+
+            int rs = pstm.executeUpdate();
+
+            if(rs > 0){
+                return Resultado.sucesso("Musica apagada", id);
+            }
+
+            return Resultado.erro("Erro desconhecido!");
+
+        } catch (SQLException e) {
+            return Resultado.erro(e.getMessage());
+        }
+
     }
 
     @Override

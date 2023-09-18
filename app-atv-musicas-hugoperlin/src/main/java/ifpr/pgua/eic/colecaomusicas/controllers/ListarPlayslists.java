@@ -59,10 +59,11 @@ public class ListarPlayslists implements Initializable{
     private void mostrarDetalhes(MouseEvent evento){
         lstMusica.getItems().clear();
         Playlist playlist = lstPlaylist.getSelectionModel().getSelectedItem();
-        
+        System.out.println(playlist.getId());
+
         Resultado r = repositorioPlaylist.listarMusicasDaPlaylist(playlist.getId());
         
-        Musica musicaAcesso;
+        //Musica musicaAcesso;
         List<Musica> listMusic;
         if(r.foiSucesso()){
             List<Integer> list = (List)r.comoSucesso().getObj(); 

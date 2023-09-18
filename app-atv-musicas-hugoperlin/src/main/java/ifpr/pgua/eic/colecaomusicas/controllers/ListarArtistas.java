@@ -34,6 +34,11 @@ public class ListarArtistas implements Initializable{
         App.popScreen();
     }
 
+    @FXML
+    void editar(ActionEvent event){
+        App.pushScreen("CADASTROARTISTA");
+    }
+
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         lstArtistas.getItems().clear();

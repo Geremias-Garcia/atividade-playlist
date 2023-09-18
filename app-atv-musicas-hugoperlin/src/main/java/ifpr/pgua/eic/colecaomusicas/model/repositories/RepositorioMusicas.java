@@ -108,4 +108,13 @@ public class RepositorioMusicas {
         }   
         return Resultado.sucesso("ok", musicaRT);
     }
+
+    public Resultado deletar(int id){
+        Resultado rs = dao.deletar(id);
+        if(rs.foiSucesso()){
+            return Resultado.sucesso("Musica removida", dao);
+        }else{
+            return Resultado.erro("Nao removeu");
+        }
+    }
 }

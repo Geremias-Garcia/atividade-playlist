@@ -20,8 +20,12 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TextField;
 
 public class AdicionarMusicasPlaylist implements Initializable{
+
+    @FXML
+    private TextField tfNome;
 
     @FXML
     private ListView<Musica> lstMusicas;
@@ -40,6 +44,22 @@ public class AdicionarMusicasPlaylist implements Initializable{
     @FXML
     void voltar(ActionEvent event) {
         App.popScreen();
+    }
+
+
+    @FXML
+    void criarPlaylist(ActionEvent event) {
+        String nome = tfNome.getText();
+
+        String msg = repositorioPlaylist.cadastrarPlaylist(nome);
+
+        Resultado r = repositorioPlaylist.listar();
+        List<Playlist> lista = (List)r.comoSucesso().getObj();
+        cbPlaylist.getItems().clear();
+        cbPlaylist.getItems().addAll(lista);
+
+        Alert alert = new Alert(AlertType.INFORMATION,msg);
+        alert.showAndWait();
     }
 
     @FXML
