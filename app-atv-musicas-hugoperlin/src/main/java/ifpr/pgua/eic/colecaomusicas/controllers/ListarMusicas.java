@@ -99,6 +99,11 @@ public class ListarMusicas implements Initializable {
         }else{
             alert = new Alert(AlertType.ERROR, rs.getMsg());
         }
+
+        Resultado r = repositorio.listar();
+        List<Musica> lista = (List)r.comoSucesso().getObj();
+        tbMusica.getItems().clear();
+        tbMusica.getItems().addAll(lista);
         alert.showAndWait();
     }
 }
