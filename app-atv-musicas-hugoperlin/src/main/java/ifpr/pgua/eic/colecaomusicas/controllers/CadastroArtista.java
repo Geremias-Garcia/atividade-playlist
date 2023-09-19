@@ -1,17 +1,22 @@
 package ifpr.pgua.eic.colecaomusicas.controllers;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
 import com.github.hugoperlin.results.Resultado;
 
 import ifpr.pgua.eic.colecaomusicas.App;
+import ifpr.pgua.eic.colecaomusicas.model.entities.Artista;
 import ifpr.pgua.eic.colecaomusicas.model.repositories.RepositorioArtistas;
 import ifpr.pgua.eic.colecaomusicas.model.repositories.RepositorioGeneros;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 
-public class CadastroArtista {
+public class CadastroArtista implements Initializable{
 
     @FXML
     private TextField tfContato;
@@ -21,10 +26,25 @@ public class CadastroArtista {
 
     private RepositorioArtistas repositorio;
 
+    private Artista antigo;
+
     public CadastroArtista(RepositorioArtistas repositorio){
         this.repositorio = repositorio;
     }
 
+    public CadastroArtista(RepositorioArtistas repositorio, Artista artista){
+        this.repositorio = repositorio;
+        this.antigo = artista;
+    }
+
+    @Override
+    public void initialize(URL arg0, ResourceBundle arg1) {
+        
+        if(antigo != null){
+            tfNome.setText(antigo.getNome());
+            tfContato.setText(antigo.getContato());
+        }
+    }
 
     @FXML
     void cadastrar(ActionEvent event) {
@@ -32,6 +52,12 @@ public class CadastroArtista {
         String contato = tfContato.getText();
 
         Resultado resultado = repositorio.cadastrarArtista(nome, contato);
+
+        if(antigo == null){
+            resultado = repositorio.cadastrarArtista(nome, contato);
+        }else{
+            resultado = repositorio.atualizarArtista(antigo.getId(), nome, contato);
+        }
 
         Alert alert;
         
@@ -48,5 +74,4 @@ public class CadastroArtista {
     void cancelar(ActionEvent event) {
         App.popScreen();
     }
-
 }

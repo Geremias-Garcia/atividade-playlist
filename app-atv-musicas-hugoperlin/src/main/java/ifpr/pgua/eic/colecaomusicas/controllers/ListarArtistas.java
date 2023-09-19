@@ -34,10 +34,6 @@ public class ListarArtistas implements Initializable{
         App.popScreen();
     }
 
-    @FXML
-    void editar(ActionEvent event){
-        App.pushScreen("CADASTROARTISTA");
-    }
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
@@ -51,7 +47,15 @@ public class ListarArtistas implements Initializable{
             List lista = (List)resultado.comoSucesso().getObj();
             lstArtistas.getItems().addAll(lista);
         }
-    
     }
 
+    @FXML
+    private void editar(){
+        Artista artista = lstArtistas.getSelectionModel().getSelectedItem();
+
+        if(artista != null){
+            App.pushScreen("CADASTROARTISTA",o-> new CadastroArtista(repositorio,artista));
+
+        }
+    }
 }
